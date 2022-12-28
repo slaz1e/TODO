@@ -13,10 +13,16 @@ Bu li etiketleri, işaretlenmişse sınıfı done olarak ayarlar ve her görev i
 import React from 'react';
 
 class ToDoList extends React.Component {
+  // Varsa, yerel depolamadaki görevlerle durumu başlat
   state = {
-    tasks: [],
+    tasks: JSON.parse(localStorage.getItem('tasks')) || [],
     task: ''
   };
+
+  // Durum her güncellendiğinde görevleri yerel depolamaya kaydedin
+  componentDidUpdate() {
+    localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+  }
 
   handleChange = event => {
     this.setState({
@@ -26,7 +32,7 @@ class ToDoList extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-  
+
     this.setState({
       tasks: [...this.state.tasks, { name: this.state.task }],
       task: ''
@@ -34,8 +40,6 @@ class ToDoList extends React.Component {
       console.log(this.state.tasks);
     });
   };
-  
-
 
   handleCheck = index => {
     const tasks = [...this.state.tasks];
@@ -55,7 +59,7 @@ class ToDoList extends React.Component {
 
   render() {
     return (
-        <div className="form-container">
+      <div className="form-container">
         <form className="input-form" onSubmit={this.handleSubmit}>
           <input
             type="text"
