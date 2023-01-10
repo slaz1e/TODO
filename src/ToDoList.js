@@ -13,23 +13,35 @@ Bu li etiketleri, işaretlenmişse sınıfı done olarak ayarlar ve her görev i
 import React from 'react';
 
 class ToDoList extends React.Component {
-  // Varsa, yerel depolamadaki görevlerle durumu başlat
+  /*
+  "state" değişkeni, "tasks" adında bir dizi ve "task" adında bir metin alanı içerir. 
+  "tasks" dizisi, localStorage'dan "tasks" anahtarına karşılık gelen değerini almaya çalışır. 
+  Eğer bu anahtar yoksa "tasks" değişkeni boş bir dizi olarak ayarlanır.
+  */
   state = {
     tasks: JSON.parse(localStorage.getItem('tasks')) || [],
     task: ''
   };
 
-  // Durum her güncellendiğinde görevleri yerel depolamaya kaydedin
+  /*
+  "componentDidUpdate" metodu, component güncellendiğinde "tasks" dizisini localStorage'a "tasks" anahtarıyla kaydeder.
+  */
   componentDidUpdate() {
     localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
   }
-
+  /*
+  "handleChange" metodu, metin alanında yapılan değişiklikleri algılar ve "task" state değişkenini günceller.
+  */
   handleChange = event => {
     this.setState({
       task: event.target.value
     });
   };
-
+  /*
+  "handleSubmit" formun gönderilmesi işlemi gerçekleştiğinde çalışır. 
+  İlk olarak, "preventDefault()" sayfanın yenilenmesi engellemek için kullanılır. 
+  Daha sonra, "setState" metodu kullanılarak state değişkenleri güncellenir
+  */
   handleSubmit = event => {
     event.preventDefault();
 
@@ -40,7 +52,9 @@ class ToDoList extends React.Component {
       console.log(this.state.tasks);
     });
   };
-
+  /*
+  "handleCheck" adında bir metot tanımlanır. Bu metot, "tasks" dizisindeki bir görevin tamamlandı/tamamlanmadı durumunu değiştirir.
+  */
   handleCheck = index => {
     const tasks = [...this.state.tasks];
     tasks[index].done = !tasks[index].done;
@@ -48,7 +62,9 @@ class ToDoList extends React.Component {
       tasks
     });
   };
-
+  /*
+  "handleDelete" metodu, "tasks" dizisinden belirli bir görevi siler.
+  */
   handleDelete = index => {
     const tasks = [...this.state.tasks];
     tasks.splice(index, 1);
@@ -56,7 +72,12 @@ class ToDoList extends React.Component {
       tasks
     });
   };
-
+  /*
+  "render()" metodu, component'ın görünümünü oluşturur. 
+  İçerisinde bir form ve bir liste bulunur. Form, metin alanı ve ekleme düğmesi içerir. 
+  Liste ise "tasks" dizisindeki görevleri gösterir. 
+  Görevlerin isimleri ve silme/tamamla düğmeleri liste elemanları içinde yer alır.
+  */
   render() {
     return (
       <div className="form-container">
